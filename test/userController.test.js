@@ -9,7 +9,7 @@ beforeAll(async () => {
 
 // Clean up and close DB connection
 afterAll(async () => {
-  await mongoose.connection.dropDatabase();
+  await userModel.deleteOne({ email: 'test@example.com' })
   await mongoose.connection.close();
 });
 
