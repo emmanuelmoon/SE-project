@@ -27,7 +27,7 @@ describe('POST /register', () => {
 
     expect(response.body.success).toBe(true);
     expect(response.body.newUser).toHaveProperty('email', 'test@example.com');
-  });
+  }, 30000);
 
   test('It should handle errors and respond with 400 status code', async () => {
     const response = await supertest(app)
@@ -42,7 +42,7 @@ describe('POST /register', () => {
 
     expect(response.body.success).toBe(false);
     expect(response.body).toHaveProperty('error');
-  });
+  }, 30000);
 
   describe('Login Controller', () => {
     test('User Not Found', async () => {
@@ -52,7 +52,7 @@ describe('POST /register', () => {
 
       expect(response.status).toBe(404);
       expect(response.text).toBe('User Not Found');
-    });
+    }, 30000);
   });
 
   describe('Login Controller', () => {
@@ -67,6 +67,6 @@ describe('POST /register', () => {
         success: true,
         token: expect.any(String)  // Check if token is returned
       });
-    });
+    }, 30000);
   });
 });

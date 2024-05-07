@@ -1,7 +1,10 @@
 const supertest = require('supertest');
 const app = require('../index');// Adjust the path according to your structure
 const mongoose = require('mongoose');
-const userModel = require('../models/userModel'); // Ensure this path is correct
+const bodyParser = require('body-parser');
+const userModel = require('../models/userModel');
+const doctorModel = require('../models/doctorModel'); // Ensure this path is correct
+// Ensure this path is correct
 
 // Setup a test database connection
 beforeAll(async () => {
@@ -45,3 +48,41 @@ describe('GET /users', () => {
     expect(response.status).toBe(200);
   });
 });
+
+
+describe('changeAccountStatusController Tests', function () {
+  let doctorId;
+  beforeEach(async function () {
+    await userModel.create({
+      name: 'John Doe',
+      email: 'john.doe@example.com',
+      password: 'password123'
+    });
+
+    await doctorModel.create({
+      name: 'Dr. Smith',
+      specialty: 'Cardiology',
+      status: 'pending'
+    });
+    doctorId = doctor._id.toString();
+  });
+
+  afterEach(async function () {
+    await userModel.deleteOne({ email: 'john.doe@example.com' });
+    await doctorModel.deleteOne({ name: 'Dr. Smith' });
+  });
+
+  it('should update the doctor status and user notification', async function () {
+    const res = await request(app)
+      .post("/api/admin/changeAccountStatus") // Adjust according to actual route
+      .send({ doctorId: doctorId, status: 'approved' });
+
+    expect(res.status).to.equal(201);
+    expect(res.body.success).to.be.true;
+    expect(res.body.message).to.equal('Account Status Updated');
+
+    // Additional database checks can be performed here
+  });
+
+  // Additional test cases
+})
